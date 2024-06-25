@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Text.RegularExpressions;
+using Piper.Samples;
 
 public class VoskDialogText : MonoBehaviour 
 {
@@ -10,10 +11,15 @@ public class VoskDialogText : MonoBehaviour
     public VoskSpeechToText VoskSpeechToText;
     public Text DialogText;
 
-	Regex left_regex = new Regex(@"влево|лево");
+    public PiperSample tts;
+
+    Regex left_regex = new Regex(@"влево|лево");
 	Regex right_regex = new Regex(@"вправо|право");
 	Regex up_regex = new Regex(@"вверх|верх");
 	Regex down_regex = new Regex(@"вниз|низ");
+    Regex hello_regex = new Regex(@"привет");
+    Regex howAreYou_regex = new Regex(@"как дела");
+    Regex irina_regex = new Regex(@"ирина|рина");
 
     void Awake()
     {
@@ -21,7 +27,8 @@ public class VoskDialogText : MonoBehaviour
     }
 
 	void AddResponse(string response) {
-		DialogText.text = response + "\n\n";
+        tts.OnInputSubmit(response);
+        DialogText.text = response + "\n\n";
 	}
 
     private void OnTranscriptionResult(string obj)
@@ -31,12 +38,12 @@ public class VoskDialogText : MonoBehaviour
 
         foreach (RecognizedPhrase p in result.Phrases)
         {
-			if (left_regex.IsMatch(p.Text))
-			{
-				player.moveLeft();
-				AddResponse("Движение влево");
-				return;
-			}
+            if (left_regex.IsMatch(p.Text))
+            {
+                player.moveLeft();
+                AddResponse("Движение влево");
+                return;
+            }
             if (right_regex.IsMatch(p.Text))
             {
                 player.moveRight();
@@ -53,6 +60,21 @@ public class VoskDialogText : MonoBehaviour
             {
                 player.moveDown();
                 AddResponse("Движение вниз");
+                return;
+            }
+            if (hello_regex.IsMatch(p.Text))
+            {
+                AddResponse("Привет, меня зовут Ирина");
+                return;
+            }
+            if (irina_regex.IsMatch(p.Text))
+            {
+                AddResponse("Да чё опять");
+                return;
+            }
+            if (howAreYou_regex.IsMatch(p.Text))
+            {
+                AddResponse("У меня все хорошо, а у тебя?");
                 return;
             }
         }

@@ -2,37 +2,26 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 
-/*
+
 namespace Piper.Samples
 {
     [RequireComponent(typeof(AudioSource))]
     public class PiperSample : MonoBehaviour
     {
         public PiperManager piper;
-        public InputField input;
-        public Button submitButton;
 
         private AudioSource _source;
 
         private void Awake()
         {
             _source = GetComponent<AudioSource>();
-            input.onSubmit.AddListener(OnInputSubmit);
-            submitButton.onClick.AddListener(OnButtonPressed);
         }
 
         private void Update()
         {
-            
-        }
 
-        private void OnButtonPressed()
-        {
-            var text = input.text;
-            OnInputSubmit(text);
         }
-
-        private async void OnInputSubmit(string text)
+        public async void OnInputSubmit(string text)
         {
             var audio = piper.TextToSpeech(text);
 
@@ -53,4 +42,3 @@ namespace Piper.Samples
 
 }
 
-*/
