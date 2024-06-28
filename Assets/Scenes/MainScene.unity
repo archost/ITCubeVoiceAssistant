@@ -294,6 +294,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f212905d072e9641ae158ce555c599e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  piper: {fileID: 36028174}
 --- !u!82 &277355335
 AudioSource:
   m_ObjectHideFlags: 0
