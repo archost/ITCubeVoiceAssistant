@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Text.RegularExpressions;
-using Piper.Samples;
+using Piper;
 
 public class VoskDialogText : MonoBehaviour 
 {
@@ -11,7 +11,7 @@ public class VoskDialogText : MonoBehaviour
     public VoskSpeechToText VoskSpeechToText;
     public Text DialogText;
 
-    public PiperSample tts;
+    public TextToSpeech tts;
 
     Regex left_regex = new Regex(@"влево|лево");
 	Regex right_regex = new Regex(@"вправо|право");
