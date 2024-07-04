@@ -7,9 +7,9 @@ public class MainScenario : Scenario
 {
     private Dictionary<Regex, string> dialog = new Dictionary<Regex, string>
     {
-        { new Regex(@"привет"), "Привет, меня зовут Ирина" },
+        { new Regex(@"привет"), "Привет, это голосовой помощник" },
         { new Regex(@"как дела"), "У меня все хорошо, а у вас?" },
-        { new Regex(@"ирина|рина"), "Да чё опять" },
+        { new Regex(@"какая сейчас погода|погода"), "Откуда я знаю, я чё тебе метеостанция" },
     };
 
     public override void OnTranscriptionResult(string obj) 

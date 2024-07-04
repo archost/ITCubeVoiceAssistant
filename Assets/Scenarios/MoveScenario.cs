@@ -13,6 +13,7 @@ public class MoveScenario : Scenario
         { new Regex(@"влево|лево"), "Движение влево" },
         { new Regex(@"вверх|верх"), "Движение вверх" },
         { new Regex(@"вниз|низ"), "Движение вниз" },
+        { new Regex(@"спасибо"), "Всегда рада помочь" },
     };
 
     private void Start()
