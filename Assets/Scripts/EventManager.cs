@@ -10,14 +10,10 @@ public class EventManager : MonoBehaviour
     public TextToSpeech tts;
 
     [SerializeField]
-    private List<GameObject> prefabs = new List<GameObject>();
+    private List<SerializableKeyValuePair<SerializableKeyValuePair<SerializableRegex, string>, GameObject>> table = 
+        new List<SerializableKeyValuePair<SerializableKeyValuePair<SerializableRegex, string>, GameObject>>();
 
     private GameObject _currentScenario = null;
-
-    private Dictionary<Regex, string> dialog = new Dictionary<Regex, string>
-    {
-        { new Regex(@"привет"), "Привет, меня зовут Ирина" }
-    };
 
     private void Awake()
     {
@@ -32,15 +28,16 @@ public class EventManager : MonoBehaviour
     private void GlobalOnTranscriptionResult(string obj)
     {
         var result = new RecognitionResult(obj);
-
         string phrase = result.Phrases[0].Text;
-
-        foreach (var item in dialog)
+        Debug.Log(phrase);
+        foreach (var item in table)
         {
-            if (item.Key.IsMatch(phrase))
+            var pair = item.ToPair();
+            var regex_response = pair.Key.ToPair();
+            if (regex_response.Key.Regex.IsMatch(phrase))
             {
-                AddResponse(item.Value);
-                ActivateScenario(prefabs[0]);
+                AddResponse(regex_response.Value);
+                ActivateScenario(pair.Value);
                 return;
             }
         }
