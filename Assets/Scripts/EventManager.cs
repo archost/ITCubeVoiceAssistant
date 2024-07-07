@@ -15,9 +15,12 @@ public class EventManager : MonoBehaviour
 
     private GameObject _currentScenario = null;
 
+    private AnimationManager _animManager;
+
     private void Awake()
     {
         VoskSpeechToText.OnTranscriptionResult += GlobalOnTranscriptionResult;
+        _animManager = FindObjectOfType<AnimationManager>();
     }
 
     void AddResponse(string response)
@@ -38,6 +41,8 @@ public class EventManager : MonoBehaviour
             {
                 AddResponse(regex_response.Value);
                 ActivateScenario(pair.Value);
+                if (regex_response.Key.Regex.IsMatch("привет"))
+                    StartCoroutine(_animManager.Waving());
                 return;
             }
         }

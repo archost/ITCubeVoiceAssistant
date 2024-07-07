@@ -12,6 +12,13 @@ public class MainScenario : Scenario
         { new Regex(@"какая сейчас погода|погода"), "Откуда я знаю, я чё тебе метеостанция" },
     };
 
+    private AnimationManager _animManager;
+
+    private void Start()
+    {
+        _animManager = FindObjectOfType<AnimationManager>();
+    }
+
     public override void OnTranscriptionResult(string obj) 
     {
         var result = new RecognitionResult(obj);
@@ -23,6 +30,8 @@ public class MainScenario : Scenario
             if (item.Key.IsMatch(phrase))
             {
                 AddResponse(item.Value);
+                if (item.Key.IsMatch("привет"))
+                    StartCoroutine(_animManager.Waving());
                 return;
             }
         }
