@@ -5,10 +5,11 @@ using UnityEngine;
 
 public class MoveScenario : Scenario
 {
-    private MovePlayer _cube;
+    //private MovePlayer _cube;
 
     private Dictionary<Regex, string> dialog = new Dictionary<Regex, string>
     {
+        { new Regex("@куб|двигай куб"), "Хорошо, куда" },
         { new Regex("@вправо|право"), "Движение вправо" },
         { new Regex(@"влево|лево"), "Движение влево" },
         { new Regex(@"вверх|верх"), "Движение вверх" },
@@ -18,26 +19,26 @@ public class MoveScenario : Scenario
 
     private void Start()
     {
-        _cube = FindAnyObjectByType<MovePlayer>();
+    //    _cube = FindAnyObjectByType<MovePlayer>();
     }
 
-    public override void OnTranscriptionResult(string obj)
+    public override void InputProcessing(string inputPhrase)
     {
-        var result = new RecognitionResult(obj);
-
-        string phrase = result.Phrases[0].Text;
-
-        foreach (var item in dialog)
+        foreach (var line in dialog)
         {
-            if (item.Key.IsMatch(phrase))
+            if (line.Key.IsMatch(inputPhrase))
             {
-                AddResponse(item.Value);
-                Move(item.Value);
+                OnSay?.Invoke(line.Value);
+                // Move(line.Value);
                 return;
             }
         }
+        if (NextScenario != null)
+        {
+            NextScenario.InputProcessing(inputPhrase);
+        }
     }
-
+    /*
     private void Move(string direction)
     {
         switch (direction)
@@ -58,4 +59,5 @@ public class MoveScenario : Scenario
                 return;
         }
     }
+    */
 }

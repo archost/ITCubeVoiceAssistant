@@ -1389,20 +1389,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dde2f6fedc97f3740a309bccce397e51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animationManager: {fileID: 396269328}
   VoskSpeechToText: {fileID: 353457855}
   tts: {fileID: 277355337}
-  table:
-  - key:
-      key:
-        pattern: "\u043F\u0440\u0438\u0432\u0435\u0442"
-      value: "\u041F\u0440\u0438\u0432\u0435\u0442, \u044D\u0442\u043E \u0433\u043E\u043B\u043E\u0441\u043E\u0432\u043E\u0439
-        \u043F\u043E\u043C\u043E\u0449\u043D\u0438\u043A"
-    value: {fileID: 5259264293431556942, guid: b3f96b9819edd314ba64ab9bda3c6ee7, type: 3}
-  - key:
-      key:
-        pattern: "\u0434\u0432\u0438\u0433\u0430\u0439 \u043A\u0443\u0431|\u0434\u0432\u0438\u0433\u0430\u0439|\u043A\u0443\u0431"
-      value: "\u0425\u043E\u0440\u043E\u0448\u043E, \u043A\u0443\u0434\u0430?"
-    value: {fileID: 5765820728747771982, guid: 253d2571c5165d847a197b3fd981a5f1, type: 3}
 --- !u!4 &1328601014
 Transform:
   m_ObjectHideFlags: 0

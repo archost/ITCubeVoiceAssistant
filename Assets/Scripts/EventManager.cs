@@ -5,60 +5,74 @@ using UnityEngine;
 
 public class EventManager : MonoBehaviour
 {
+    public AnimationManager animationManager;
+
     public VoskSpeechToText VoskSpeechToText;
 
     public TextToSpeech tts;
 
-    [SerializeField]
-    private List<SerializableKeyValuePair<SerializableKeyValuePair<SerializableRegex, string>, GameObject>> table = 
-        new List<SerializableKeyValuePair<SerializableKeyValuePair<SerializableRegex, string>, GameObject>>();
+    private ScenarioFactory _factory = new();
 
-    private GameObject _currentScenario = null;
+    private Scenario _currentScenario;
 
-    private AnimationManager _animManager;
+    private Scenario _switchScenario;
+
+    private Scenario _mainScenario;
 
     private void Awake()
     {
-        VoskSpeechToText.OnTranscriptionResult += GlobalOnTranscriptionResult;
-        _animManager = FindObjectOfType<AnimationManager>();
+        VoskSpeechToText.OnTranscriptionResult += OnTranscriptionResult;
+
+        _switchScenario = _factory.GetScenario("SwitchScenario");
+        _switchScenario.OnSay += Say;
+        _switchScenario.OnSwitchScenario += SwitchScenario;
+        _switchScenario.OnAnimate += Animate;
+
+        _mainScenario = _factory.GetScenario("MainScenario");
+        _mainScenario.OnSay += Say;
+        _mainScenario.OnAnimate += Animate;
+        _mainScenario.NextScenario = _switchScenario;
+
+        _currentScenario = _mainScenario;
     }
 
-    void AddResponse(string response)
+    private void OnTranscriptionResult(string obj)
+    {
+        var result = new RecognitionResult(obj);
+        string phrase = result.Phrases[0].Text;
+
+        Debug.Log("Input: " + phrase);
+
+        _currentScenario.InputProcessing(phrase);
+    }
+
+    private void Say(string response)
     {
         tts.OnInputSubmit(response);
     }
 
-    private void GlobalOnTranscriptionResult(string obj)
+    private void SwitchScenario(string newScenario, string lastPhrase = null)
     {
-        var result = new RecognitionResult(obj);
-        string phrase = result.Phrases[0].Text;
-        Debug.Log(phrase);
-        foreach (var item in table)
+        if (_currentScenario != null && _currentScenario != _mainScenario)
         {
-            var pair = item.ToPair();
-            var regex_response = pair.Key.ToPair();
-            if (regex_response.Key.Regex.IsMatch(phrase))
-            {
-                AddResponse(regex_response.Value);
-                ActivateScenario(pair.Value);
-                if (regex_response.Key.Regex.IsMatch("привет"))
-                    StartCoroutine(_animManager.Waving());
-                return;
-            }
+            _currentScenario.OnSay -= Say;
+            _currentScenario.OnAnimate -= Animate;
+        }
+
+        _currentScenario = _factory.GetScenario(newScenario);
+        _currentScenario.OnSay += Say;
+        _currentScenario.OnAnimate += Animate;
+
+        _currentScenario.NextScenario = _mainScenario;
+
+        if (lastPhrase != null)
+        {
+            _currentScenario.InputProcessing(lastPhrase);
         }
     }
 
-    private void ActivateScenario(GameObject obj)
+    private void Animate(Animation animation)
     {
-        if (_currentScenario != null)
-        {
-            Scenario script2 = _currentScenario.GetComponent<Scenario>();
-            VoskSpeechToText.OnTranscriptionResult -= script2.OnTranscriptionResult;
-            Destroy(_currentScenario);
-        }
-            
-        _currentScenario = Instantiate(obj);
-        Scenario script = _currentScenario.GetComponent<Scenario>();
-        VoskSpeechToText.OnTranscriptionResult += script.OnTranscriptionResult;
+        animationManager.Animate(animation);
     }
 }
