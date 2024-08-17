@@ -11,6 +11,8 @@ public class EventManager : MonoBehaviour
 
     public TextToSpeech tts;
 
+    public GameObject tgBot;
+
     private ScenarioFactory _factory = new();
 
     private Scenario _currentScenario;
@@ -42,8 +44,8 @@ public class EventManager : MonoBehaviour
         string phrase = result.Phrases[0].Text;
 
         Debug.Log("Input: " + phrase);
-
-        _currentScenario.InputProcessing(phrase);
+        if (phrase != "")
+            _currentScenario.InputProcessing(phrase);
     }
 
     private void Say(string response)
@@ -65,6 +67,9 @@ public class EventManager : MonoBehaviour
 
         _currentScenario.NextScenario = _mainScenario;
 
+        if (newScenario == "SignUpScenario")
+            _currentScenario.SetTargetObject(tgBot);
+
         if (lastPhrase != null)
         {
             _currentScenario.InputProcessing(lastPhrase);
@@ -75,4 +80,6 @@ public class EventManager : MonoBehaviour
     {
         animationManager.Animate(animation);
     }
+
+
 }

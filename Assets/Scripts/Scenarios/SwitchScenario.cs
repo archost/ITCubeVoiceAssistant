@@ -9,11 +9,12 @@ public class SwitchScenario : Scenario
     private Dictionary<Regex, string> dialog = new Dictionary<Regex, string>
     {
         { new Regex("@куб|двигай куб"), "MoveScenario" },
+        { new Regex("@хочу записаться|записаться"), "SignUpScenario" },
+
     };
 
     public override void InputProcessing(string inputPhrase)
     {
-        Debug.Log("InputProcessing in switch");
         foreach (var line in dialog)
         {
             if (line.Key.IsMatch(inputPhrase))

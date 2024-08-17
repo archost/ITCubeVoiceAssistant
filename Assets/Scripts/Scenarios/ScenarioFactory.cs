@@ -7,7 +7,7 @@ public class ScenarioFactory
     {
         _scenarios.Add("MainScenario", new MainScenario());
         _scenarios.Add("SwitchScenario", new SwitchScenario());
-        _scenarios.Add("MoveScenario", new MoveScenario());
+        _scenarios.Add("SignUpScenario", new SignUpScenario());
     }
 
     public Scenario GetScenario(string scenarioName)

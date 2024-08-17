@@ -9,15 +9,12 @@ public class TelegramBot : MonoBehaviour
     private string botToken = "";
     private string chatId = "";
 
-    [SerializeField]
-    private TMP_InputField inputField;
-
     public void SendMsg(string msg)
     {
         StartCoroutine(SendMessageToTelegram(msg));
     }
 
-    IEnumerator SendMessageToTelegram(string message)
+    private IEnumerator SendMessageToTelegram(string message)
     {
         string json = "{\"chat_id\":\"" + chatId + "\",\"text\":\"" + message + "\"}";
 
