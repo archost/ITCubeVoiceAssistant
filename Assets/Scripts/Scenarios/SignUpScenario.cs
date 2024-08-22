@@ -15,20 +15,24 @@ public class SignUpScenario : Scenario
 
     private Dictionary<string, string> wordToDigit = new Dictionary<string, string>
     {
-        { "ноль", "0" }, { "один", "1" }, { "два", "2" }, { "три", "3" }, { "четыре", "4" },
+        { "нуль", "0" }, { "ноль", "0" }, { "один", "1" }, { "два", "2" }, { "три", "3" }, { "четыре", "4" },
         { "пять", "5" }, { "шесть", "6" }, { "семь", "7" }, { "восемь", "8" }, { "девять", "9" }
     };
 
     public SignUpScenario()
     {
-        _currentState = State.IDLE;
+        _currentState = State.Idle;
         dialog = new Dictionary<Regex, Action>
         {
             { new Regex(@"записаться"), () => {
-                OnSay?.Invoke("Вы хотите записаться в айти куб? Замечательно, скажите, как вас зовут?");
-                _currentState = State.WAITINGFORNAME;
+                OnSay?.Invoke("Вы хотите записаться в айти куб? Замечательно, скажите, как вас зовут? Для отмены скажите отмена");
+                _currentState = State.WaitingForName;
                 }
             },
+            { new Regex(@"отмена"), () => {
+                _currentState = State.Idle;
+                }
+            }
         };
     }
 
@@ -43,14 +47,14 @@ public class SignUpScenario : Scenario
             }
         }
         
-        if (_currentState == State.WAITINGFORNAME)
+        if (_currentState == State.WaitingForName)
         {
             _name = inputPhrase;
-            _currentState = State.WAITINGFORNUMBER;
+            _currentState = State.WaitingForNumber;
             OnSay?.Invoke("Хорошо, продиктуйте свой номер телефона. Отдельно каждую цифру");
             return;
         }
-        else if (_currentState == State.WAITINGFORNUMBER)
+        else if (_currentState == State.WaitingForNumber)
         {
             string number = WordsToDigits(inputPhrase, out bool successful);
             if (!successful)
@@ -65,14 +69,14 @@ public class SignUpScenario : Scenario
             message += "(" + inputPhrase + ")";
             tgBot.SendMsg(message);
             OnSay?.Invoke("Спасибо за обращение");
-            _currentState = State.IDLE;
+            _currentState = State.Idle;
             _name = "";
             return;
         }
         else
         {
             _name = "";
-            _currentState = State.IDLE;
+            _currentState = State.Idle;
         }
 
         if (NextScenario != null && inputPhrase != "")
@@ -117,7 +121,7 @@ public class SignUpScenario : Scenario
 
 public enum State
 {
-    IDLE,
-    WAITINGFORNAME,
-    WAITINGFORNUMBER,
+    Idle,
+    WaitingForName,
+    WaitingForNumber,
 }

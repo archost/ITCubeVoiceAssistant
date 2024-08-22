@@ -10,6 +10,8 @@ public class TextToSpeech : MonoBehaviour
 
     private AudioSource _source;
 
+    public bool IsPlaying => _source.isPlaying;
+
     private void Awake()
     {
         _source = GetComponent<AudioSource>();

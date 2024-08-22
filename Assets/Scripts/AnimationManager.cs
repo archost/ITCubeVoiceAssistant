@@ -19,6 +19,7 @@ public class AnimationManager : MonoBehaviour
         {
             { Animation.WAVING, nameof(Waving) },
             { Animation.HEADNO, nameof(HeadNo) },
+            { Animation.DANCE, nameof(Dance) },
         };
     }
 
@@ -41,6 +42,13 @@ public class AnimationManager : MonoBehaviour
         _animator.SetBool("HeadNoTransition", false);
     }
 
+    public IEnumerator Dance()
+    {
+        _animator.SetBool("DanceTransition", true);
+        yield return new WaitForSeconds(0);
+        _animator.SetBool("DanceTransition", false);
+    }
+
     public void Animate(Animation animation)
     {
         if (_animationTable.ContainsKey(animation))
@@ -55,5 +63,5 @@ public enum Animation
     IDLE,
     WAVING,
     HEADNO,
-
+    DANCE,
 }

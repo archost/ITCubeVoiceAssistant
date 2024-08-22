@@ -1,6 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
+using TMPro;
 using UnityEngine;
 
 public class EventManager : MonoBehaviour
@@ -21,6 +19,9 @@ public class EventManager : MonoBehaviour
 
     private Scenario _mainScenario;
 
+    [SerializeField]
+    private TextMeshProUGUI _subtitles;
+
     private void Awake()
     {
         VoskSpeechToText.OnTranscriptionResult += OnTranscriptionResult;
@@ -38,8 +39,15 @@ public class EventManager : MonoBehaviour
         _currentScenario = _mainScenario;
     }
 
+    private void Update()
+    {
+        _subtitles.gameObject.SetActive(tts.IsPlaying);
+    }
+
     private void OnTranscriptionResult(string obj)
     {
+        if (tts.IsPlaying)
+            return;
         var result = new RecognitionResult(obj);
         string phrase = result.Phrases[0].Text;
 
@@ -50,6 +58,7 @@ public class EventManager : MonoBehaviour
 
     private void Say(string response)
     {
+        _subtitles.text = response;
         tts.OnInputSubmit(response);
     }
 
