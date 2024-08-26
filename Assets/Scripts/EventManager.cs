@@ -1,15 +1,24 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EventManager : MonoBehaviour
 {
-    public AnimationManager animationManager;
+    [SerializeField]
+    private Image _screenLogo;
 
-    public VoskSpeechToText VoskSpeechToText;
+    [SerializeField]
+    private AnimationManager _animationManager;
 
-    public TextToSpeech tts;
+    [SerializeField]
+    private VoskSpeechToText _VoskSpeechToText;
 
-    public GameObject tgBot;
+    [SerializeField]
+    private TextToSpeech _tts;
+
+    [SerializeField] 
+    private GameObject _tgBot;
 
     private ScenarioFactory _factory = new();
 
@@ -22,9 +31,11 @@ public class EventManager : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI _subtitles;
 
+    private float _fadeDuration = 2.0f;
+
     private void Awake()
     {
-        VoskSpeechToText.OnTranscriptionResult += OnTranscriptionResult;
+        _VoskSpeechToText.OnTranscriptionResult += OnTranscriptionResult;
 
         _switchScenario = _factory.GetScenario("SwitchScenario");
         _switchScenario.OnSay += Say;
@@ -37,16 +48,18 @@ public class EventManager : MonoBehaviour
         _mainScenario.NextScenario = _switchScenario;
 
         _currentScenario = _mainScenario;
+
+        StartCoroutine(FadeOut());
     }
 
     private void Update()
     {
-        _subtitles.gameObject.SetActive(tts.IsPlaying);
+        _subtitles.gameObject.SetActive(_tts.IsPlaying);
     }
 
     private void OnTranscriptionResult(string obj)
     {
-        if (tts.IsPlaying)
+        if (_tts.IsPlaying)
             return;
         var result = new RecognitionResult(obj);
         string phrase = result.Phrases[0].Text;
@@ -59,7 +72,7 @@ public class EventManager : MonoBehaviour
     private void Say(string response)
     {
         _subtitles.text = response;
-        tts.OnInputSubmit(response);
+        _tts.OnInputSubmit(response);
     }
 
     private void SwitchScenario(string newScenario, string lastPhrase = null)
@@ -77,7 +90,7 @@ public class EventManager : MonoBehaviour
         _currentScenario.NextScenario = _mainScenario;
 
         if (newScenario == "SignUpScenario")
-            _currentScenario.SetTargetObject(tgBot);
+            _currentScenario.SetTargetObject(_tgBot);
 
         if (lastPhrase != null)
         {
@@ -87,8 +100,25 @@ public class EventManager : MonoBehaviour
 
     private void Animate(Animation animation)
     {
-        animationManager.Animate(animation);
+        _animationManager.Animate(animation);
     }
+    IEnumerator FadeOut()
+    {
+        // Получаем начальный цвет изображения
+        Color startColor = _screenLogo.color;
+        Color endColor = new Color(startColor.r, startColor.g, startColor.b, 0f); // Конечный цвет с альфа-каналом 0
 
+        float elapsedTime = 0f;
 
+        while (elapsedTime < _fadeDuration)
+        {
+            // Линейная интерполяция между начальным и конечным цветом
+            _screenLogo.color = Color.Lerp(startColor, endColor, elapsedTime / _fadeDuration);
+            elapsedTime += Time.deltaTime;
+            yield return null; // Ждем следующий кадр
+        }
+
+        // Убеждаемся, что цвет установлен в конечное значение
+        _screenLogo.color = endColor;
+    }
 }

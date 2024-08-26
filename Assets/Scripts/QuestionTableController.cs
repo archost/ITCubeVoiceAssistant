@@ -11,12 +11,11 @@ public class QuestionTableController : MonoBehaviour
 
     private List<String> _questions = new List<String>() { "Расскажи про IT-куб", "Какие есть направления?", 
         "Программирование на питоне", "Курс робототехника", "Малая комьютерная академия", 
-        "Что такое алгоритмика?", "Курс 3D моделирование", "Курс кибербезопасность", "Хочу учиться в IT-кубе"};
+        "Что такое алгоритмика?", "Курс 3D моделирование", "Курс кибербезопасность", "Хочу записаться на учебу"};
 
     private void Start()
     {
-        _questionsText.text = "Спросите меня:\n\n";
-        for (int i = 0; i < 8; i++)
+        for (int i = 0; i < 9; i++)
         {
             _questionsText.text += _questions[i] + "\n\n";
         }
@@ -28,11 +27,11 @@ public class QuestionTableController : MonoBehaviour
     {
         yield return new WaitForSeconds(30);
 
+        _questionsText.text = "";
+
         List<int> added = new();
 
-        _questionsText.text = "Спросите меня:\n\n";
-
-        for (int i = 0; i < 8; i++)
+        for (int i = 0; i < 9; i++)
         {
             int currentId = UnityEngine.Random.Range(0, _questions.Count);
             while (added.Contains(currentId))

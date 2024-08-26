@@ -1,8 +1,6 @@
 using UnityEngine;
 using UnityEngine.Networking;
 using System.Collections;
-using UnityEngine.UI;
-using TMPro;
 
 public class TelegramBot : MonoBehaviour
 {

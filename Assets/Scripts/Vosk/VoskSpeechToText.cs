@@ -3,13 +3,11 @@ using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
-using System.Threading;
 using System.Threading.Tasks;
 using Ionic.Zip;
 using Unity.Profiling;
 using UnityEngine;
 using UnityEngine.Networking;
-using UnityEngine.UI;
 using Vosk;
 
 public class VoskSpeechToText : MonoBehaviour

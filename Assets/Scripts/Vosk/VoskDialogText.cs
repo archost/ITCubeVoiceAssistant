@@ -1,9 +1,6 @@
 using UnityEngine;
-using UnityEngine.UI;
 using System.Text.RegularExpressions;
-using Piper;
 using System.Collections.Generic;
-using System.Runtime.InteropServices.WindowsRuntime;
 
 public class VoskDialogText : MonoBehaviour
 {

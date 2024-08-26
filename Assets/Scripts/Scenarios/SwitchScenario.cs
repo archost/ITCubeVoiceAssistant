@@ -1,15 +1,12 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using UnityEngine;
-using UnityEngine.Events;
 
 public class SwitchScenario : Scenario
 {
     private Dictionary<Regex, string> dialog = new Dictionary<Regex, string>
     {
         { new Regex("@куб|двигай куб"), "MoveScenario" },
-        { new Regex("@хочу записаться|записаться"), "SignUpScenario" },
+        { new Regex("@хочу записаться|записаться|учиться"), "SignUpScenario" },
 
     };
 
